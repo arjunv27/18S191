@@ -1,5 +1,9 @@
 ### A Pluto.jl notebook ###
+<<<<<<< HEAD
+# v0.11.14
+=======
 # v0.11.13
+>>>>>>> 123040947d5b03a572b58c261b3009c8041b5c4e
 
 using Markdown
 using InteractiveUtils
@@ -87,15 +91,15 @@ md"#### Exerise 1.1
 "
 
 # ╔═╡ f51333a6-eded-11ea-34e6-bfbb3a69bcb0
-random_vect = missing # replace this with your code!
+random_vect = rand(10) # replace this with your code!
 
 # ╔═╡ cf738088-eded-11ea-2915-61735c2aa990
 md"👉 Make a function `mean` using a `for` loop, which computes the mean/average of a vector of numbers."
 
 # ╔═╡ 0ffa8354-edee-11ea-2883-9d5bfea4a236
 function mean(x)
+	return reduce(+, x, init=0) / length(x)
 	
-	return missing
 end
 
 # ╔═╡ 1f104ce4-ee0e-11ea-2029-1d9c817175af
@@ -105,15 +109,14 @@ mean([1, 2, 3])
 md"👉 Define `m` to be the mean of `random_vect`."
 
 # ╔═╡ 2a391708-edee-11ea-124e-d14698171b68
-m = missing
+m = mean(random_vect)
 
 # ╔═╡ e2863d4c-edef-11ea-1d67-332ddca03cc4
 md"""👉 Write a function `demean`, which takes a vector `x` and subtracts the mean from each value in `x`."""
 
 # ╔═╡ ec5efe8c-edef-11ea-2c6f-afaaeb5bc50c
 function demean(x)
-	
-	return missing
+	return x .- mean(x)
 end
 
 # ╔═╡ 29e10640-edf0-11ea-0398-17dbf4242de3
@@ -144,8 +147,7 @@ md"""
 
 # ╔═╡ b6b65b94-edf0-11ea-3686-fbff0ff53d08
 function create_bar()
-	
-	return missing
+	return [zeros(40); ones(20); zeros(40)]
 end
 
 # ╔═╡ 22f28dae-edf2-11ea-25b5-11c369ae1253
@@ -157,8 +159,7 @@ md"""
 
 # ╔═╡ 8c19fb72-ed6c-11ea-2728-3fa9219eddc4
 function vecvec_to_matrix(vecvec)
-	
-	return missing
+	return reduce(hcat, vecvec)
 end
 
 # ╔═╡ c4761a7e-edf2-11ea-1e75-118e73dadbed
@@ -173,8 +174,11 @@ md"""
 
 # ╔═╡ 9f1c6d04-ed6c-11ea-007b-75e7e780703d
 function matrix_to_vecvec(matrix)
-	
-	return missing
+	vec = []
+	for i in 1:size(matrix)[1]
+		push!(vec,matrix[i,:])
+	end
+	return vec
 end
 
 # ╔═╡ 70955aca-ed6e-11ea-2330-89b4d20b1795
@@ -219,12 +223,11 @@ md"""
 
 # ╔═╡ f6898df6-ee07-11ea-2838-fde9bc739c11
 function mean_colors(image)
-	
-	return missing
+	return reduce(+, image) ./ length(image)
 end
 
 # ╔═╡ d75ec078-ee0d-11ea-3723-71fb8eecb040
-
+(1,2,3) .+ (2,3,4)
 
 # ╔═╡ f68d4a36-ee07-11ea-0832-0360530f102e
 md"""
@@ -235,18 +238,17 @@ md"""
 # ╔═╡ f6991a50-ee07-11ea-0bc4-1d68eb028e6a
 begin
 	function quantize(x::Number)
-		
-		return missing
+		return floor(x, sigdigits=1)
 	end
 	
 	function quantize(color::AbstractRGB)
 		# you will write me in a later exercise!
-		return missing
+		return RGB(quantize(color.r), quantize(color.g), quantize(color.b))
 	end
 	
 	function quantize(image::AbstractMatrix)
 		# you will write me in a later exercise!
-		return missing
+		return quantize.(image)
 	end
 end
 
@@ -284,8 +286,7 @@ md"""
 
 # ╔═╡ 63e8d636-ee0b-11ea-173d-bd3327347d55
 function invert(color::AbstractRGB)
-	
-	return missing
+	return RGB(1 - color.r, 1 - color.g, 1 - color.b)
 end
 
 # ╔═╡ 2cc2f84e-ee0d-11ea-373b-e7ad3204bb00
@@ -306,9 +307,6 @@ invert(red)
 # ╔═╡ 846b1330-ee0b-11ea-3579-7d90fafd7290
 md"Can you invert the picture of Philip?"
 
-# ╔═╡ 943103e2-ee0b-11ea-33aa-75a8a1529931
-philip_inverted = missing
-
 # ╔═╡ f6d6c71a-ee07-11ea-2b63-d759af80707b
 md"""
 #### Exercise 2.6
@@ -317,21 +315,32 @@ md"""
 
 # ╔═╡ f6e2cb2a-ee07-11ea-06ee-1b77e34c1e91
 begin
+	function myclamp(x::Number)
+		if x < 0 
+			return 0
+		elseif x > 1 
+			return 1
+		else 
+			return x
+		end
+	end
 	function noisify(x::Number, s)
-
-		return missing
+		return myclamp(x + s*rand()*rand(Set([-1,1])))
 	end
 	
 	function noisify(color::AbstractRGB, s)
 		# you will write me in a later exercise!
-		return missing
+    	return RGB(noisify(color.r, s), noisify(color.g, s), noisify(color.b, s))
 	end
 	
 	function noisify(image::AbstractMatrix, s)
 		# you will write me in a later exercise!
-		return missing
+		return noisify.(image, s)
 	end
 end
+
+# ╔═╡ 27d57e56-f31c-11ea-30b0-c72b40902e88
+rand()*rand(Set([-1,1]))
 
 # ╔═╡ f6fc1312-ee07-11ea-39a0-299b67aee3d8
 md"""
@@ -372,7 +381,7 @@ You may need noise intensities larger than 1. Why?
 
 # ╔═╡ bdc2df7c-ee0c-11ea-2e9f-7d2c085617c1
 answer_about_noise_intensity = md"""
-The image is unrecognisable with intensity ...
+The image is unrecognisable with intensity above 2. As a random number is being generated, there are still pixels within the clamp bounds.
 """
 
 # ╔═╡ 81510a30-ee0e-11ea-0062-8b3327428f9d
@@ -392,6 +401,9 @@ mean_colors(philip)
 
 # ╔═╡ 9751586e-ee0c-11ea-0cbb-b7eda92977c9
 quantize(philip)
+
+# ╔═╡ 943103e2-ee0b-11ea-33aa-75a8a1529931
+philip_inverted = invert.(philip)
 
 # ╔═╡ ac15e0d0-ee0c-11ea-1eaf-d7f88b5df1d7
 noisify(philip, philip_noise)
@@ -440,7 +452,7 @@ You've seen some colored lines in this notebook to visualize arrays. Can you mak
 """
 
 # ╔═╡ 01070e28-ee0f-11ea-1928-a7919d452bdd
-
+colored_line(v)
 
 # ╔═╡ 7522f81e-ee1c-11ea-35af-a17eb257ff1a
 md"Try changing `n` and `v` around. Notice that you can run the cell `v = rand(n)` again to regenerate new random values."
@@ -457,8 +469,13 @@ A better solution is to use the *closest* value that is inside the vector. Effec
 
 # ╔═╡ 802bec56-ee09-11ea-043e-51cf1db02a34
 function extend(v, i)
-	
-	return missing
+	if i < 1 
+		return v[1]
+	elseif i > length(v)
+		return v[length(v)]
+	else
+		return v[i]
+	end
 end
 
 # ╔═╡ b7f3994c-ee1b-11ea-211a-d144db8eafc2
@@ -471,7 +488,7 @@ extend(v, 1)
 extend(v, -8)
 
 # ╔═╡ 805691ce-ee09-11ea-053d-6d2e299ee123
-extend(v, n + 10)
+typeof(extend(v, n + 10))
 
 # ╔═╡ 806e5766-ee0f-11ea-1efc-d753cd83d086
 md"Extended with 0:"
@@ -497,8 +514,14 @@ md"""
 
 # ╔═╡ 807e5662-ee09-11ea-3005-21fdcc36b023
 function blur_1D(v, l)
+
 	
-	return missing
+		return map(i ->
+			mean(map(i -> extend(v,i), i-l:i+l)), 
+		    LinearIndices(v)
+		)
+
+
 end
 
 # ╔═╡ 808deca8-ee09-11ea-0ee3-1586fa1ce282
@@ -523,8 +546,14 @@ md"""
 👉 Apply the box blur to your vector `v`. Show the original and the new vector by creating two cells that call `colored_line`. Make the parameter $\ell$ interactive, and call it `l_box` instead of just `l` to avoid a variable naming conflict.
 """
 
-# ╔═╡ ca1ac5f4-ee1c-11ea-3d00-ff5268866f87
+# ╔═╡ 42c3bde4-f329-11ea-2ac1-bdffcdca6e1b
+@bind l_box_slider Slider(0:8, show_value=true)
 
+# ╔═╡ 375897e0-f38b-11ea-2ae3-7109b5052c3a
+v
+
+# ╔═╡ e21bc3a8-f38d-11ea-10d1-fbf1cc55c823
+blur = colored_line(blur_1D(v,l_box_slider))
 
 # ╔═╡ 80ab64f4-ee09-11ea-29b4-498112ed0799
 md"""
@@ -542,9 +571,18 @@ Again, we need to take care about what happens if $v_{i -n }$ falls off the end 
 
 # ╔═╡ 28e20950-ee0c-11ea-0e0a-b5f2e570b56e
 function convolve_vector(v, k)
-	
-	return missing
+# 	new = copy(v)
+	l = Int64((length(k) - 1) ÷ 2)
+	map(i ->
+		sum(
+			map(i -> extend(v, i), i-l:i+l) .* k
+			),
+		LinearIndices(v)
+	)
 end
+
+# ╔═╡ 0bcdda88-f3c3-11ea-3fe0-cb5504159806
+convolve_vector(v, [0,1,2])
 
 # ╔═╡ 93284f92-ee12-11ea-0342-833b1a30625c
 test_convolution = let
@@ -575,21 +613,44 @@ For simplicity you can take $\sigma=1$.
 """
 
 # ╔═╡ 1c8b4658-ee0c-11ea-2ede-9b9ed7d3125e
-function gaussian_kernel(n)
-	
-	return missing
+begin	
+ 	G(x, σ=0.5) = 1/(2*π*σ^2) * ℯ^(-(x^2)/(2*σ^2))
+	G(x, y, σ=1) = 1/sqrt(2*π*σ^2) * ℯ^(-(x^2+y^2)/(2*σ^2))
+	G(I::CartesianIndex{2}, σ=0.5)=G(I.I..., σ)
 end
+
+# ╔═╡ da7f5dcc-f530-11ea-2ab5-cf4b11933aa4
+G(1,1)
+
+# ╔═╡ dad3b6da-f470-11ea-2c46-33112655d70b
+begin
+	function gaussian_1Dkernel(n)
+	    w = Int64(n÷2)
+		gauss = map(i -> G(i), -w:w)
+		return gauss ./ sum(gauss)
+	end
+end
+
+# ╔═╡ 2530fba6-f53a-11ea-2936-bfc602199132
+function gaussian_kernel(n)
+	w = n ÷ 2
+	gauss = (map(i -> G(i), CartesianIndices((-w:w, -w:w))))
+	gauss ./ sum(gauss)
+end
+
+# ╔═╡ 0e31671e-f531-11ea-17a2-35c8ba94e54b
+sum(gaussian_1Dkernel(3))
 
 # ╔═╡ f8bd22b8-ee14-11ea-04aa-ab16fd01826e
 md"Let's test your kernel function!"
 
-# ╔═╡ 2a9dd06a-ee13-11ea-3f84-67bb309c77a8
-gaussian_kernel_size_1D = 3 # change this value, or turn me into a slider!
+# ╔═╡ 4d67a44a-f3c7-11ea-2968-f359032efbb1
+@bind gaussian_kernel_size_1D Slider(0:10, show_value=true)
 
 # ╔═╡ 38eb92f6-ee13-11ea-14d7-a503ac04302e
 test_gauss_1D_a = let
 	v = random_vect
-	k = gaussian_kernel(gaussian_kernel_size_1D)
+	k = gaussian_1Dkernel(gaussian_kernel_size_1D)
 	
 	if k !== missing
 		convolve_vector(v, k)
@@ -602,7 +663,7 @@ colored_line(test_gauss_1D_a)
 # ╔═╡ 24c21c7c-ee14-11ea-1512-677980db1288
 test_gauss_1D_b = let
 	v = create_bar()
-	k = gaussian_kernel(gaussian_kernel_size_1D)
+	k = gaussian_1Dkernel(gaussian_kernel_size_1D)
 	
 	if k !== missing
 		convolve_vector(v, k)
@@ -635,10 +696,24 @@ md"""
 👉 Write a function `extend_mat` that takes a matrix `M` and indices `i` and `j`, and returns the closest element of the matrix.
 """
 
+# ╔═╡ 95afae34-f460-11ea-25fd-55fd5ece538f
+CartesianIndex((1,2))
+
 # ╔═╡ 7c2ec6c6-ee15-11ea-2d7d-0d9401a5e5d1
 function extend_mat(M::AbstractMatrix, i, j)
-	
-	return missing
+	num_rows, num_col = size(M)
+	index = [i, j]
+	if i < 1
+		index[1] = 1
+	elseif i > num_rows
+		index[1] = num_rows
+	end
+	if j < 1
+		index[2] = 1
+	elseif j > num_col
+		index[2] = num_col
+	end
+	return M[index[1], index[2]]
 end
 
 # ╔═╡ 9afc4dca-ee16-11ea-354f-1d827aaa61d2
@@ -671,10 +746,32 @@ md"""
 👉 Implement a function `convolve_image(M, K)`. 
 """
 
+# ╔═╡ 465f52f0-f51c-11ea-1a7e-9fec9afd27ee
+Int64(floor(0.5))
+
+# ╔═╡ 10292ebc-f469-11ea-31f5-6fdaa0c8ec8a
+begin
+	
+    function neighboors(x,y, k)
+
+		i = x - Int64(floor(k ÷ 2))
+		j = y - Int64(floor(k ÷ 2))
+		return CartesianIndices((i:i+k-1, j:j+k-1))
+		
+	end
+	neighboors(I :: CartesianIndex{2}, k) =	neighboors(I.I..., k)
+
+end
+
+
+
 # ╔═╡ 8b96e0bc-ee15-11ea-11cd-cfecea7075a0
 function convolve_image(M::AbstractMatrix, K::AbstractMatrix)
-	
-	return missing
+	return map(indM -> 
+		sum(map(ind ->
+				extend_mat(M,ind.I...),
+				neighboors(indM, size(K)[1])) .* K),
+		CartesianIndices(M))
 end
 
 # ╔═╡ 5a5135c6-ee1e-11ea-05dc-eb0c683c2ce5
@@ -689,6 +786,9 @@ K_test = [
 	1/2 0  1/2
 	0   0  0
 ]
+
+# ╔═╡ 27a6386a-f530-11ea-3139-91c198ed1947
+size(K_test)[1]
 
 # ╔═╡ 42dfa206-ee1e-11ea-1fcd-21671042064c
 convolve_image(test_image_with_border, K_test)
@@ -719,10 +819,11 @@ $$G(x,y)=\frac{1}{2\pi \sigma^2}e^{\frac{-(x^2+y^2)}{2\sigma^2}}$$
 """
 
 # ╔═╡ aad67fd0-ee15-11ea-00d4-274ec3cda3a3
-function with_gaussian_blur(image)
-	
-	return missing
-end
+
+	function with_gaussian_blur(image)
+	   return convolve_image(image, gaussian_kernel(3))
+	end
+
 
 # ╔═╡ 8ae59674-ee18-11ea-3815-f50713d0fa08
 md"_Let's make it interactive. 💫_"
@@ -771,10 +872,26 @@ For simplicity you can choose one of the "channels" (colours) in the image to ap
 """
 
 # ╔═╡ 9eeb876c-ee15-11ea-1794-d3ea79f47b75
+begin
+	sobel_x = [ 1 0 -1
+		        2 0 -2
+		        1 0 -1 ]
+	sobel_y = [1 2 1
+		       0 0 0
+		       -1 -2 -1 ]
+	sobel_total = sqrt.(sobel_x.^2 .+ sobel_y.^2)
+			
+	
 function with_sobel_edge_detect(image)
 	
-	return missing
+	return RGB.(sqrt.(convolve_image(image, sobel_y).^2 + convolve_image(image, sobel_x).^2))
 end
+
+end
+
+
+# ╔═╡ 56a70e38-f53e-11ea-05a8-8f42f7b7dd2d
+sobel_total
 
 # ╔═╡ 1b85ee76-ee10-11ea-36d7-978340ef61e6
 md"""
@@ -1421,6 +1538,7 @@ with_sobel_edge_detect(sobel_camera_image)
 # ╠═943103e2-ee0b-11ea-33aa-75a8a1529931
 # ╟─f6d6c71a-ee07-11ea-2b63-d759af80707b
 # ╠═f6e2cb2a-ee07-11ea-06ee-1b77e34c1e91
+# ╠═27d57e56-f31c-11ea-30b0-c72b40902e88
 # ╟─f6ef2c2e-ee07-11ea-13a8-2512e7d94426
 # ╟─f6fc1312-ee07-11ea-39a0-299b67aee3d8
 # ╟─774b4ce6-ee1b-11ea-2b48-e38ee25fc89b
@@ -1459,10 +1577,13 @@ with_sobel_edge_detect(sobel_camera_image)
 # ╠═807e5662-ee09-11ea-3005-21fdcc36b023
 # ╟─808deca8-ee09-11ea-0ee3-1586fa1ce282
 # ╟─809f5330-ee09-11ea-0e5b-415044b6ac1f
-# ╠═ca1ac5f4-ee1c-11ea-3d00-ff5268866f87
+# ╠═42c3bde4-f329-11ea-2ac1-bdffcdca6e1b
+# ╠═375897e0-f38b-11ea-2ae3-7109b5052c3a
+# ╠═e21bc3a8-f38d-11ea-10d1-fbf1cc55c823
 # ╟─ea435e58-ee11-11ea-3785-01af8dd72360
 # ╟─80ab64f4-ee09-11ea-29b4-498112ed0799
 # ╠═28e20950-ee0c-11ea-0e0a-b5f2e570b56e
+# ╠═0bcdda88-f3c3-11ea-3fe0-cb5504159806
 # ╟─e9aadeee-ee1d-11ea-3525-95f6ba5fda31
 # ╟─5eea882c-ee13-11ea-0d56-af81ecd30a4a
 # ╠═93284f92-ee12-11ea-0342-833b1a30625c
@@ -1470,8 +1591,12 @@ with_sobel_edge_detect(sobel_camera_image)
 # ╟─7ffd14f8-ee1d-11ea-0343-b54fb0333aea
 # ╟─80b7566a-ee09-11ea-3939-6fab470f9ec8
 # ╠═1c8b4658-ee0c-11ea-2ede-9b9ed7d3125e
+# ╠═da7f5dcc-f530-11ea-2ab5-cf4b11933aa4
+# ╠═dad3b6da-f470-11ea-2c46-33112655d70b
+# ╠═2530fba6-f53a-11ea-2936-bfc602199132
+# ╠═0e31671e-f531-11ea-17a2-35c8ba94e54b
 # ╟─f8bd22b8-ee14-11ea-04aa-ab16fd01826e
-# ╠═2a9dd06a-ee13-11ea-3f84-67bb309c77a8
+# ╠═4d67a44a-f3c7-11ea-2968-f359032efbb1
 # ╟─b424e2aa-ee14-11ea-33fa-35491e0b9c9d
 # ╠═38eb92f6-ee13-11ea-14d7-a503ac04302e
 # ╟─bc1c20a4-ee14-11ea-3525-63c9fa78f089
@@ -1479,6 +1604,7 @@ with_sobel_edge_detect(sobel_camera_image)
 # ╟─27847dc4-ee0a-11ea-0651-ebbbb3cfd58c
 # ╠═b01858b6-edf3-11ea-0826-938d33c19a43
 # ╟─7c1bc062-ee15-11ea-30b1-1b1e76520f13
+# ╠═95afae34-f460-11ea-25fd-55fd5ece538f
 # ╠═7c2ec6c6-ee15-11ea-2d7d-0d9401a5e5d1
 # ╟─649df270-ee24-11ea-397e-79c4355e38db
 # ╟─9afc4dca-ee16-11ea-354f-1d827aaa61d2
@@ -1490,6 +1616,9 @@ with_sobel_edge_detect(sobel_camera_image)
 # ╟─efd1ceb4-ee1c-11ea-350e-f7e3ea059024
 # ╟─3cd535e4-ee26-11ea-2482-fb4ad43dda19
 # ╟─7c41f0ca-ee15-11ea-05fb-d97a836659af
+# ╠═27a6386a-f530-11ea-3139-91c198ed1947
+# ╠═465f52f0-f51c-11ea-1a7e-9fec9afd27ee
+# ╠═10292ebc-f469-11ea-31f5-6fdaa0c8ec8a
 # ╠═8b96e0bc-ee15-11ea-11cd-cfecea7075a0
 # ╟─0cabed84-ee1e-11ea-11c1-7d8a4b4ad1af
 # ╟─5a5135c6-ee1e-11ea-05dc-eb0c683c2ce5
@@ -1507,6 +1636,7 @@ with_sobel_edge_detect(sobel_camera_image)
 # ╟─f461f5f2-ee18-11ea-3d03-95f57f9bf09e
 # ╟─7c6642a6-ee15-11ea-0526-a1aac4286cdd
 # ╠═9eeb876c-ee15-11ea-1794-d3ea79f47b75
+# ╠═56a70e38-f53e-11ea-05a8-8f42f7b7dd2d
 # ╟─1a0324de-ee19-11ea-1d4d-db37f4136ad3
 # ╠═1bf94c00-ee19-11ea-0e3c-e12bc68d8e28
 # ╟─1ff6b5cc-ee19-11ea-2ca8-7f00c204f587
